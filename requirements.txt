@@ -1,0 +1,4 @@
+awscli
+awsebcli
+ansible
+#pkg_resources

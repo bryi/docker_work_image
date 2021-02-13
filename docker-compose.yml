@@ -1,0 +1,17 @@
+version: "3.2"
+services:
+
+    work_image:
+        container_name: work_image
+        image: bryi/bwi
+        restart: on-failure
+        build:
+            context: .
+        environment:
+            - PATH=$PATH:/home/worker/.local:/home/worker/.local/bin/
+        volumes:
+            - /home/ctm/workdir/:/home/worker/workdir
+
+#volumes:
+#    local_directory:
+#        driver: local
