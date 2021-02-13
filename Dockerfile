@@ -13,8 +13,6 @@ RUN pip3 install --user -r requirements.txt
 
 FROM debian AS build-image
 
-RUN useradd -ms /bin/bash worker
-
 COPY --from=compile-image /root/.local /root/.local
 
 ENV EKSCTL='https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz' \
@@ -41,11 +39,14 @@ RUN apt-get update && apt-get clean autoclean \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
 && mkdir -p /home/workdir
 
-RUN echo "complete -C '/home/worker/.local/bin//aws_completer' aws" >> ~/.bashrc \
+RUN echo "source /etc/bash_completion" > ~/.bashrc \
+&& echo "complete -C '/root/.local/bin//aws_completer' aws" >> ~/.bashrc \
 && eksctl completion bash >> ~/.bash_completion \
 && echo 'source <(kubectl completion bash)' >>~/.bashrc \
 && echo 'source <(helm completion bash)' >>~/.bashrc \
 && terraform -install-autocomplete
+
+ENV PATH=$PATH:/root/.local/:/root/.local/bin
 
 WORKDIR /home/workdir
 
