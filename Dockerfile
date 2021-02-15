@@ -22,7 +22,7 @@ ENV EKSCTL='https://github.com/weaveworks/eksctl/releases/latest/download/eksctl
     TERRAFORM="https://releases.hashicorp.com/terraform/0.14.6/terraform_0.14.6_linux_amd64.zip"
 
 RUN apt-get update && apt-get clean autoclean \
-&& apt-get install -y --no-install-recommends python3 python3-pip python3-setuptools bash nano bash-completion git wget gzip unzip tar curl ca-certificates\
+&& apt-get install -y --no-install-recommends less python3 python3-pip groff python3-setuptools bash nano bash-completion git wget gzip unzip tar curl ca-certificates\
 && apt-get autoremove --yes \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
 && curl --silent --location ""$EKSCTL"" | tar xz -C /tmp \
@@ -34,13 +34,14 @@ RUN apt-get update && apt-get clean autoclean \
 && curl --silent -LO ""$TERRAFORM"" \
 && unzip terraform_0.14.6_linux_amd64.zip \
 && chmod +x ./terraform && mv -v ./terraform /usr/local/bin/terraform \
+&& curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+&& unzip awscliv2.zip && ./aws/install \
 && apt-get clean autoclean \
 && apt-get autoremove --yes \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
-&& mkdir -p /home/workdir
-
-RUN echo "source /etc/bash_completion" > ~/.bashrc \
-&& echo "complete -C '/root/.local/bin//aws_completer' aws" >> ~/.bashrc \
+&& mkdir -p /home/workdir \
+&& echo "source /etc/bash_completion" > ~/.bashrc \
+&& echo "complete -C '/usr/local/bin//aws_completer' aws" >> ~/.bashrc \
 && eksctl completion bash >> ~/.bash_completion \
 && echo 'source <(kubectl completion bash)' >>~/.bashrc \
 && echo 'source <(helm completion bash)' >>~/.bashrc \

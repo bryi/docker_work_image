@@ -1,4 +1,4 @@
-awscli
+#awscli
 awsebcli
 ansible
 #pkg_resources
