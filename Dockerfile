@@ -19,7 +19,9 @@ ENV EKSCTL='https://github.com/weaveworks/eksctl/releases/latest/download/eksctl
     KUBECTL_VER="`(curl -L -s https://dl.k8s.io/release/stable.txt)`" \
     KUBECTL="https://dl.k8s.io/release/v1.20.2/bin/linux/amd64/kubectl" \
     HELM="https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz" \
-    TERRAFORM="https://releases.hashicorp.com/terraform/0.14.6/terraform_0.14.6_linux_amd64.zip"
+    TERRAFORM="https://releases.hashicorp.com/terraform/0.14.6/terraform_0.14.6_linux_amd64.zip" \
+    SAMURL="https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip" \
+    AWSCLI2="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
 
 RUN apt-get update && apt-get clean autoclean \
 && apt-get install -y --no-install-recommends less python3 python3-pip groff python3-setuptools bash nano bash-completion git wget gzip unzip tar curl ca-certificates\
@@ -34,8 +36,10 @@ RUN apt-get update && apt-get clean autoclean \
 && curl --silent -LO ""$TERRAFORM"" \
 && unzip terraform_0.14.6_linux_amd64.zip \
 && chmod +x ./terraform && mv -v ./terraform /usr/local/bin/terraform \
-&& curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+&& curl "$AWSCLI2" -o "awscliv2.zip" \
 && unzip awscliv2.zip && ./aws/install \
+&& curl "$SAMURL" -o "aws-sam-cli-linux-x86_64.zip" \
+&& unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && ./sam-installation/install \
 && apt-get clean autoclean \
 && apt-get autoremove --yes \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
