@@ -17,9 +17,9 @@ curl --silent -LO ""$KUBECTL"" \
 && unzip awscliv2.zip && ./aws/install --update\
 && curl --silent -LO "$SAMURL" -o "aws-sam-cli-linux-x86_64.zip" \
 && unzip aws-sam-cli-linux-x86_64.zip -d sam-installation && ./sam-installation/install \
-&& echo "source /etc/bash_completion" > ~/.bashrc \
+&& echo "source /etc/bash_completion" >> ~/.bashrc \
 && echo "complete -C '/usr/local/bin//aws_completer' aws" >> ~/.bashrc \
 && eksctl completion bash >> ~/.bash_completion \
-&& echo 'source <(kubectl completion bash)' >>~/.bashrc \
+&& kubectl completion bash >/etc/bash_completion.d/kubectl \
 && echo 'source <(helm completion bash)' >>~/.bashrc \
 && terraform -install-autocomplete
